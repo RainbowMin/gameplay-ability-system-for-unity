@@ -1,23 +1,22 @@
-using GAS.Editor.Validation;
+using System;
+using GAS.General.Validation;
+using UnityEditor;
+using UnityEngine;
 
-#if UNITY_EDITOR
 namespace GAS.Editor.General
 {
-    using UnityEditor;
-    using UnityEngine;
-
     public class StringEditWindow : EditorWindow
     {
         private string _tip;
         private string _initialString;
         private string _editedString = "";
         private ValidationDelegate _validator;
-        private System.Action<string> _callback;
+        private Action<string> _callback;
 
         private bool focusInputField = false;
 
         public static void OpenWindow(string tip, string initialString, ValidationDelegate validator,
-            System.Action<string> callback, string title = "Input")
+            Action<string> callback, string title = "Input")
         {
             var window = GetWindow<StringEditWindow>();
             window.Init(tip, initialString, validator, callback);
@@ -25,7 +24,7 @@ namespace GAS.Editor.General
             window.ShowModalUtility();
         }
 
-        public static void OpenWindow(string tip, string initialString, System.Action<string> callback,
+        public static void OpenWindow(string tip, string initialString, Action<string> callback,
             string title = "Input")
         {
             OpenWindow(tip, initialString, null, callback, title);
@@ -53,20 +52,6 @@ namespace GAS.Editor.General
             if (GUILayout.Button("Save"))
             {
                 Save();
-            }
-
-            EditorGUILayout.HelpBox("Press Enter to save, Esc to cancel", MessageType.None);
-
-            if (Event.current.isKey && Event.current.keyCode == KeyCode.Return && Event.current.type == EventType.KeyUp)
-            {
-                Event.current.Use();
-                Save();
-            }
-
-            if (Event.current.isKey && Event.current.keyCode == KeyCode.Escape && Event.current.type == EventType.KeyUp)
-            {
-                Event.current.Use();
-                Close();
             }
         }
 
@@ -96,7 +81,7 @@ namespace GAS.Editor.General
         }
 
         private void Init(string tip, string initialString, ValidationDelegate validator,
-            System.Action<string> callback)
+            Action<string> callback)
         {
             _tip = tip;
             _initialString = initialString;
@@ -106,4 +91,3 @@ namespace GAS.Editor.General
         }
     }
 }
-#endif

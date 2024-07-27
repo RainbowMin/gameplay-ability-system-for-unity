@@ -1,20 +1,21 @@
-﻿#if UNITY_EDITOR
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using GAS.Editor.General;
+using GAS.General.Validation;
+using GAS.Runtime;
+using Sirenix.OdinInspector;
+using Sirenix.OdinInspector.Editor;
+using Sirenix.Utilities;
+using Sirenix.Utilities.Editor;
+using UnityEditor;
+using UnityEngine;
+using Debug = UnityEngine.Debug;
+using Object = UnityEngine.Object;
+
 namespace GAS.Editor
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
-    using GAS.Editor.General;
-    using GAS.Editor.Validation;
-    using GAS.Runtime;
-    using Sirenix.OdinInspector.Editor;
-    using Sirenix.Utilities;
-    using Sirenix.Utilities.Editor;
-    using UnityEditor;
-    using UnityEngine;
-    using Debug = UnityEngine.Debug;
-
     public class GASAssetAggregator : OdinMenuEditorWindow
     {
         private static readonly Type[] _types = new Type[5]
@@ -49,13 +50,27 @@ namespace GAS.Editor
             "D- Ability System Component"
         };
 
-        [MenuItem("EX-GAS/Asset Aggregator", priority = 1)]
+        private const string OpenWindow_MenuItemName = "EX-GAS/Asset Aggregator";
+#if EX_GAS_ENABLE_HOT_KEYS
+        private const string OpenWindow_MenuItemNameEnh = OpenWindow_MenuItemName + " %F9";
+#else
+        private const string OpenWindow_MenuItemNameEnh = OpenWindow_MenuItemName;
+#endif
+        [MenuItem(OpenWindow_MenuItemNameEnh, priority = 1)]
         private static void OpenWindow()
         {
             CheckLibPaths();
             var window = GetWindow<GASAssetAggregator>();
-            window.position = GUIHelper.GetEditorWindowRect().AlignCenter(1050, 625);
-            window.MenuWidth = 220;
+            window.position = GUIHelper.GetEditorWindowRect().AlignCenter(1600, 900);
+            window.MenuWidth = 240;
+        }
+
+        private void ShowButton(Rect rect)
+        {
+            if (SirenixEditorGUI.SDFIconButton(rect, "GitHub", SdfIconType.Github))
+            {
+                Application.OpenURL("https://github.com/No78Vino/gameplay-ability-system-for-unity");
+            }
         }
 
         private static void CheckLibPaths()
@@ -119,25 +134,27 @@ namespace GAS.Editor
             // Draws a toolbar with the name of the currently selected menu item.
             SirenixEditorGUI.BeginHorizontalToolbar(toolbarHeight);
             {
-                if (selected != null) GUILayout.Label(selected.Name);
+                if (selected != null) GUILayout.Label(selected.Name + " (" + selected.Value.GetType().FullName + ")");
 
                 if (selected != null && (selected.Value is DirectoryInfo || selected.Value is AbilityOverview))
                 {
-                    DirectoryInfo directoryInfo = selected.Value is AbilityOverview
+                    var directoryInfo = selected.Value is AbilityOverview
                         ? _directoryInfos[3]
                         : selected.Value as DirectoryInfo;
 
-                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("Open In Explorer")))
+                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("浏览")))
+                    {
                         OpenDirectoryInExplorer(directoryInfo);
+                    }
 
-                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("Create Sub Directory")))
+                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("新建子文件夹")))
                     {
                         CreateNewSubDirectory(directoryInfo);
                         GUIUtility
                             .ExitGUI(); // In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
                     }
 
-                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("Create Asset")))
+                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("新建")))
                     {
                         CreateNewAsset(directoryInfo);
                         GUIUtility
@@ -145,24 +162,51 @@ namespace GAS.Editor
                     }
 
                     if (!directoryInfo.Root)
-                        if (SirenixEditorGUI.ToolbarButton(new GUIContent("Remove")))
+                    {
+                        if (SirenixEditorGUI.ToolbarButton(new GUIContent("删除")))
                         {
                             RemoveSubDirectory(directoryInfo);
                             GUIUtility
                                 .ExitGUI(); // In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
                         }
+                    }
                 }
 
                 if (selected is { Value: ScriptableObject asset })
                 {
-                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("Show In Project")))
+                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("定位")))
+                    {
                         ShowInProject(asset);
+                    }
 
-                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("Open In Explorer")))
+                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("浏览")))
+                    {
                         OpenAssetInExplorer(asset);
+                    }
 
-                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("Remove")))
+                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("定位脚本")))
+                    {
+                        var monoScript = MonoScript.FromScriptableObject(asset);
+                        string path = AssetDatabase.GetAssetPath(monoScript);
+
+                        var obj = AssetDatabase.LoadAssetAtPath<Object>(path);
+                        ShowInProject(obj);
+                    }
+
+                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("编辑脚本")))
+                    {
+                        AssetDatabase.OpenAsset(MonoScript.FromScriptableObject(asset));
+                    }
+
+                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("删除")))
+                    {
                         RemoveAsset(asset);
+                    }
+                }
+
+                if (SirenixEditorGUI.ToolbarButton(new GUIContent("GAS设置")))
+                {
+                    GASSettingAggregator.OpenWindow();
                 }
             }
             SirenixEditorGUI.EndHorizontalToolbar();
@@ -181,7 +225,7 @@ namespace GAS.Editor
             Process.Start("explorer.exe", path);
         }
 
-        private void ShowInProject(ScriptableObject asset)
+        private void ShowInProject(Object asset)
         {
             if (asset != null)
             {
@@ -202,12 +246,8 @@ namespace GAS.Editor
                 s =>
                 {
                     var newPath = directoryInfo.Directory + "/" + s;
-                    if (!AssetDatabase.IsValidFolder(newPath))
-                    {
-                        return ValidationResult.Invalid("Folder already exists!");
-                    }
-
-                    return ValidationResult.Valid;
+                    var isExist = AssetDatabase.IsValidFolder(newPath);
+                    return isExist ? ValidationResult.Invalid("Folder already exists!") : ValidationResult.Valid;
                 },
                 s =>
                 {
@@ -253,13 +293,22 @@ namespace GAS.Editor
 
         private void RemoveAsset(ScriptableObject asset)
         {
-            if (!EditorUtility.DisplayDialog("Warning", "Are you sure you want to delete this asset?", "Yes",
-                    "No")) return;
-
-            var name = asset.name; // Get the name before deleting
-            AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(asset));
-            Refresh();
-            Debug.Log($"[EX] {name} asset deleted!");
+            if (asset == null)
+            {
+                EditorUtility.DisplayDialog("Warning", "The asset you want to delete is null", "Ok");
+                return;
+            }
+            
+            var assetName = asset.name; // Get the name before deleting
+            var assetPath = AssetDatabase.GetAssetPath(asset);
+            if (EditorUtility.DisplayDialog("Warning",
+                    $"Are you sure you want to delete this asset?\n\nName=\"{assetName}\"\nPath=\"{assetPath}\""
+                    , "Yes", "No"))
+            {
+                AssetDatabase.DeleteAsset(assetPath);
+                Refresh();
+                Debug.Log($"[EX] delete asset: Name=\"{assetName}\", Path=\"{assetPath}\"");
+            }
         }
 
         void OnMenuSelectionChange(SelectionChangedType selectionChangedType)
@@ -272,4 +321,3 @@ namespace GAS.Editor
         }
     }
 }
-#endif

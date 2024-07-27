@@ -1,9 +1,8 @@
-#if UNITY_EDITOR
 using System.Collections.Generic;
 using System.Text;
 using GAS.Editor.General;
-using GAS.Editor.Validation;
 using GAS.General;
+using GAS.General.Validation;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEditor.TreeDataModel;
@@ -28,7 +27,7 @@ namespace GAS.Editor
             var jsonState = SessionState.GetString(KSessionStateKeyPrefix + Asset.GetInstanceID(), "");
             if (!string.IsNullOrEmpty(jsonState))
                 JsonUtility.FromJsonOverwrite(jsonState, treeViewState);
-            var treeModel = new TreeModel<GameplayTagTreeElement>(Asset.GameplayTagTreeElements);
+            var treeModel = new ExTreeModel<GameplayTagTreeElement>(Asset.GameplayTagTreeElements);
             _treeView = new GameplayTagTreeView(treeViewState, treeModel, Asset);
             _treeView.beforeDroppingDraggedItems += OnBeforeDroppingDraggedItems;
             _treeView.Reload();
@@ -36,7 +35,7 @@ namespace GAS.Editor
             _searchField = new SearchField();
             _searchField.downOrUpArrowKeyPressed += _treeView.SetFocusAndEnsureSelectedItem;
 
-            if (!_treeView.treeModel.Root.HasChildren) CreateFirstTag();
+            if (!_treeView.ExTreeModel.Root.HasChildren) CreateFirstTag();
         }
 
         private void OnDisable()
@@ -51,7 +50,7 @@ namespace GAS.Editor
         {
             if (_treeView != null)
             {
-                _treeView.treeModel.SetData(Asset.GameplayTagTreeElements);
+                _treeView.ExTreeModel.SetData(Asset.GameplayTagTreeElements);
                 _treeView.Reload();
             }
         }
@@ -112,12 +111,12 @@ namespace GAS.Editor
         {
             Undo.RecordObject(Asset, "Add Item To Asset");
             var selection = _treeView.GetSelection();
-            TreeElement parent = (selection.Count == 1 ? _treeView.treeModel.Find(selection[0]) : null) ??
-                                 _treeView.treeModel.Root;
+            ExTreeElement parent = (selection.Count == 1 ? _treeView.ExTreeModel.Find(selection[0]) : null) ??
+                                 _treeView.ExTreeModel.Root;
             var depth = parent != null ? parent.Depth + 1 : 0;
-            var id = _treeView.treeModel.GenerateUniqueID();
+            var id = _treeView.ExTreeModel.GenerateUniqueID();
             var element = new GameplayTagTreeElement(tagName, depth, id);
-            _treeView.treeModel.AddElement(element, parent, 0);
+            _treeView.ExTreeModel.AddElement(element, parent, 0);
 
             // Select newly created element
             _treeView.SetSelection(new[] { id }, TreeViewSelectionOptions.RevealAndFrame);
@@ -138,7 +137,7 @@ namespace GAS.Editor
             var sb = new StringBuilder("Tags: \n");
             foreach (var selectedItem in selection)
             {
-                TreeElement tag = _treeView.treeModel.Find(selectedItem);
+                ExTreeElement tag = _treeView.ExTreeModel.Find(selectedItem);
                 BuildTagPath(sb, tag, "    " + GetPrefix(tag));
             }
 
@@ -153,12 +152,12 @@ namespace GAS.Editor
             {
                 Undo.RecordObject(Asset, "Remove Tag From Asset");
 
-                _treeView.treeModel.RemoveElements(selection);
+                _treeView.ExTreeModel.RemoveElements(selection);
                 SaveAsset();
             }
         }
 
-        private void BuildTagPath(StringBuilder sb, TreeElement tag, string prefix, bool isSubTag = false)
+        private void BuildTagPath(StringBuilder sb, ExTreeElement tag, string prefix, bool isSubTag = false)
         {
             var tagName = prefix + tag.Name;
             var s = tagName + (isSubTag ? " (sub tag)" : "");
@@ -173,7 +172,7 @@ namespace GAS.Editor
             }
         }
 
-        private string GetPrefix(TreeElement tag)
+        private string GetPrefix(ExTreeElement tag)
         {
             string prefix = "";
             var parent = tag.Parent;
@@ -209,7 +208,7 @@ namespace GAS.Editor
         {
             private readonly GameplayTagsAsset _asset;
 
-            public GameplayTagTreeView(TreeViewState state, TreeModel<GameplayTagTreeElement> model,
+            public GameplayTagTreeView(TreeViewState state, ExTreeModel<GameplayTagTreeElement> model,
                 GameplayTagsAsset asset)
                 : base(state, model)
             {
@@ -229,4 +228,3 @@ namespace GAS.Editor
         }
     }
 }
-#endif

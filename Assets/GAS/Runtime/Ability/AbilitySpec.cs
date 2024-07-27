@@ -4,7 +4,26 @@ namespace GAS.Runtime
 {
     public abstract class AbilitySpec
     {
-        protected object[] _abilityArguments;
+        protected object[] _abilityArguments = Array.Empty<object>();
+
+        /// <summary>
+        /// 获取激活能力时传递给能力的参数。
+        /// </summary>
+        /// <remarks>
+        /// <para>该属性返回一个对象数组，表示激活能力时传入的参数。</para>
+        /// <para>即使没有参数传递，该数组也绝不会是 <c>null</c>，在这种情况下，它将是一个空数组。</para>
+        /// </remarks>
+        public object[] AbilityArguments => _abilityArguments;
+
+        /// <summary>
+        /// 获取或设置与能力关联的自定义数据。
+        /// </summary>
+        /// <remarks>
+        /// <para>此属性用于存储能力的自定义信息，以便在能力的不同任务之间共享数据。</para>
+        /// <para>例如，可以在一个技能的任务(AbilityTask)中设置此数据，然后在同一个技能的另一个任务(AbilityTask)中检索和使用该数据。</para>
+        /// </remarks>
+        public object UserData { get; set; }
+
 
         public AbilitySpec(AbstractAbility ability, AbilitySystemComponent owner)
         {
@@ -12,11 +31,18 @@ namespace GAS.Runtime
             Owner = owner;
         }
 
+        public virtual void Dispose()
+        {
+            _onActivateResult = null;
+            _onEndAbility = null;
+            _onCancelAbility = null;
+        }
+
         public AbstractAbility Ability { get; }
 
         public AbilitySystemComponent Owner { get; protected set; }
 
-        public float Level { get; }
+        public int Level { get; protected set; }
 
         public bool IsActive { get; private set; }
 
@@ -29,7 +55,7 @@ namespace GAS.Runtime
         {
             _onActivateResult += onActivateResult;
         }
-        
+
         public void UnregisterActivateResult(Action<AbilityActivateResult> onActivateResult)
         {
             _onActivateResult -= onActivateResult;
@@ -39,22 +65,27 @@ namespace GAS.Runtime
         {
             _onEndAbility += onEndAbility;
         }
-        
+
         public void UnregisterEndAbility(Action onEndAbility)
         {
             _onEndAbility -= onEndAbility;
         }
-        
+
         public void RegisterCancelAbility(Action onCancelAbility)
         {
             _onCancelAbility += onCancelAbility;
         }
-        
+
         public void UnregisterCancelAbility(Action onCancelAbility)
         {
             _onCancelAbility -= onCancelAbility;
         }
-        
+
+        public virtual void SetLevel(int level)
+        {
+            Level = level;
+        }
+
         public virtual AbilityActivateResult CanActivate()
         {
             if (IsActive) return AbilityActivateResult.FailHasActivated;
@@ -95,13 +126,18 @@ namespace GAS.Runtime
 
             foreach (var modifier in Ability.Cost.Modifiers)
             {
-                if (modifier.Operation != GEOperation.Add) continue;
+                // 常规来说消耗是减法, 但是加一个负数也应该被视为减法
+                if (modifier.Operation != GEOperation.Add && modifier.Operation != GEOperation.Minus) continue;
 
                 var costValue = modifier.CalculateMagnitude(costSpec, modifier.ModiferMagnitude);
                 var attributeCurrentValue =
                     Owner.GetAttributeCurrentValue(modifier.AttributeSetName, modifier.AttributeShortName);
-
-                if (attributeCurrentValue + costValue < 0) return false;
+                
+                if(modifier.Operation == GEOperation.Add)
+                    if (attributeCurrentValue + costValue < 0) return false;
+                
+                if(modifier.Operation == GEOperation.Minus)
+                    if (attributeCurrentValue - costValue < 0) return false;
             }
 
             return true;
@@ -142,6 +178,7 @@ namespace GAS.Runtime
                 IsActive = true;
                 ActiveCount++;
                 Owner.GameplayTagAggregator.ApplyGameplayAbilityDynamicTag(this);
+
                 ActivateAbility(_abilityArguments);
             }
 
@@ -153,7 +190,6 @@ namespace GAS.Runtime
         {
             if (!IsActive) return;
             IsActive = false;
-
             Owner.GameplayTagAggregator.RestoreGameplayAbilityDynamicTags(this);
             EndAbility();
             _onEndAbility?.Invoke();
@@ -171,8 +207,10 @@ namespace GAS.Runtime
 
         public void Tick()
         {
-            if (!IsActive) return;
-            AbilityTick();
+            if (IsActive)
+            {
+                AbilityTick();
+            }
         }
 
         protected virtual void AbilityTick()
@@ -188,11 +226,11 @@ namespace GAS.Runtime
 
     public abstract class AbilitySpec<T> : AbilitySpec where T : AbstractAbility
     {
-        protected T data;
+        public T Data { get; private set; }
 
         protected AbilitySpec(T ability, AbilitySystemComponent owner) : base(ability, owner)
         {
-            data = ability;
+            Data = ability;
         }
     }
 }

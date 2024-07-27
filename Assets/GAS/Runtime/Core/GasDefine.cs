@@ -1,20 +1,17 @@
-﻿using UnityEditor;
-using UnityEngine;
-
-namespace GAS
+﻿namespace GAS
 {
     public static class GasDefine
     {
-        public const string GAS_VERSION = "1.0.9";
+        public const string GAS_VERSION = "1.1.7";
 
         public const string GAS_TAG_LIB_CSHARP_SCRIPT_NAME = "GTagLib.gen.cs";
 
         public const string GAS_ATTRIBUTE_LIB_CSHARP_SCRIPT_NAME = "GAttrLib.gen.cs";
 
         public const string GAS_ATTRIBUTESET_LIB_CSHARP_SCRIPT_NAME = "GAttrSetLib.gen.cs";
-        
+
         public const string GAS_ABILITY_LIB_CSHARP_SCRIPT_NAME = "GAbilityLib.gen.cs";
-        
+
         public const string GAS_ASCUTIL_CSHARP_SCRIPT_NAME = "AbilitySystemComponentExtension.gen.cs";
 
         /// <summary>
@@ -33,7 +30,7 @@ namespace GAS
         public const string GAS_CUE_LIBRARY_FOLDER = "GameplayCueLib";
 
         public const string GAS_MMC_LIBRARY_FOLDER = "ModMagnitudeCalculationLib";
-        
+
         public const string GAS_ABILITY_TASK_LIBRARY_FOLDER = "AbilityTaskLib";
 
         public const string GAS_ATTRIBUTESET_CLASS_TYPE_PREFIX = "GAS.Runtime.AttributeSet.AS_";

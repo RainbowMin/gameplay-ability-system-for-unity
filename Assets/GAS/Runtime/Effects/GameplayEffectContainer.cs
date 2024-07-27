@@ -5,8 +5,9 @@ namespace GAS.Runtime
 {
     public class GameplayEffectContainer
     {
-        private List<GameplayEffectSpec> _gameplayEffectSpecs = new List<GameplayEffectSpec>();
         private readonly AbilitySystemComponent _owner;
+        private readonly List<GameplayEffectSpec> _gameplayEffectSpecs = new List<GameplayEffectSpec>();
+        private readonly List<GameplayEffectSpec> _cachedGameplayEffectSpecs = new List<GameplayEffectSpec>();
 
         public GameplayEffectContainer(AbilitySystemComponent owner)
         {
@@ -19,14 +20,20 @@ namespace GAS.Runtime
         {
             return _gameplayEffectSpecs;
         }
-        
+
         public void Tick()
         {
-            var enumerable = _gameplayEffectSpecs.ToArray();
-            foreach (var gameplayEffectSpec in enumerable)
+            _cachedGameplayEffectSpecs.AddRange(_gameplayEffectSpecs);
+
+            foreach (var gameplayEffectSpec in _cachedGameplayEffectSpecs)
             {
-                if(gameplayEffectSpec.IsActive) gameplayEffectSpec.Tick();
+                if (gameplayEffectSpec.IsActive)
+                {
+                    gameplayEffectSpec.Tick();
+                }
             }
+
+            _cachedGameplayEffectSpecs.Clear();
         }
 
         public void RegisterOnGameplayEffectContainerIsDirty(Action action)
@@ -64,38 +71,70 @@ namespace GAS.Runtime
         /// </summary>
         /// <param name="spec"></param>
         /// <returns>
-        ///     If the added effect is an instant effect,return false.
-        ///     If the added effect is a duration effect and activate successfully ,return true.
+        ///     Returns true if the gameplay effect is successfully applied and remains active.
+        ///     Returns false if the gameplay effect is applied but immediately removed due to a tag(in `AssetTags` or `GrantedTags`) match
+        ///     with the `RemoveGameplayEffectsWithTags` function, indicating that the effect did not persist.
         /// </returns>
-        public bool AddGameplayEffectSpec(GameplayEffectSpec spec)
+        public GameplayEffectSpec AddGameplayEffectSpec(AbilitySystemComponent source,GameplayEffectSpec effectSpec,bool overwriteEffectLevel = false,int effectLevel = 0)
         {
-            // Check Immunity Tags
-            if (_owner.HasAnyTags(spec.GameplayEffect.TagContainer.ApplicationImmunityTags))
+            if (!effectSpec.GameplayEffect.CanApplyTo(_owner)) return null;
+            
+            if (effectSpec.GameplayEffect.IsImmune(_owner))
             {
-                spec.TriggerOnImmunity();
-                return false;
+                // TODO 免疫Cue触发
+                // var lv = overwriteEffectLevel ? effectLevel : source.Level;
+                // effectSpec.Init(source, _owner, lv);
+                // effectSpec.TriggerOnImmunity();
+                return null;
+            }
+            
+            var level = overwriteEffectLevel ? effectLevel : source.Level;
+            if (effectSpec.DurationPolicy == EffectsDurationPolicy.Instant)
+            {
+                effectSpec.Init(source, _owner, level);
+                effectSpec.TriggerOnExecute();
+                return null;
             }
 
-            if (spec.GameplayEffect.DurationPolicy == EffectsDurationPolicy.Instant)
+            // Check GE Stacking
+            if (effectSpec.Stacking.stackingType == StackingType.None)
             {
-                spec.TriggerOnExecute();
-                return false;
+                return Operation_AddNewGameplayEffectSpec(source, effectSpec,overwriteEffectLevel,effectLevel);
+            }
+            
+            // 处理GE堆叠
+            // 基于Target类型GE堆叠
+            if (effectSpec.Stacking.stackingType == StackingType.AggregateByTarget)
+            {
+                GetStackingEffectSpecByData(effectSpec.GameplayEffect, out var geSpec);
+                // 新添加GE
+                if (geSpec == null)
+                    return Operation_AddNewGameplayEffectSpec(source, effectSpec,overwriteEffectLevel,effectLevel);
+                bool stackCountChange = geSpec.RefreshStack();
+                if (stackCountChange) OnRefreshStackCountMakeContainerDirty();
+                return geSpec;
+            }
+            
+            // 基于Source类型GE堆叠
+            if (effectSpec.Stacking.stackingType == StackingType.AggregateBySource)
+            {
+                GetStackingEffectSpecByDataFrom(effectSpec.GameplayEffect,source, out var geSpec);
+                if (geSpec == null)
+                    return Operation_AddNewGameplayEffectSpec(source, effectSpec,overwriteEffectLevel,effectLevel);
+                bool stackCountChange = geSpec.RefreshStack();
+                if (stackCountChange) OnRefreshStackCountMakeContainerDirty();
+                return geSpec;
             }
 
-            _gameplayEffectSpecs.Add(spec);
-            spec.TriggerOnAdd();
-
-            var canRunning = spec.CanRunning();
-            if (canRunning)
-                spec.Apply();
-            else
-                spec.DisApply();
-
-            OnGameplayEffectContainerIsDirty?.Invoke();
-
-            return canRunning;
+            return null;
         }
 
+        public GameplayEffectSpec AddGameplayEffectSpec(AbilitySystemComponent source, GameplayEffect effect,int effectLevel)
+        {
+            var spec = effect.CreateSpec();
+            return AddGameplayEffectSpec(source, spec, true,effectLevel);
+        }
+        
         public void RemoveGameplayEffectSpec(GameplayEffectSpec spec)
         {
             spec.DisApply();
@@ -113,14 +152,15 @@ namespace GAS.Runtime
                 if (!gameplayEffectSpec.IsActive)
                 {
                     // new active gameplay effects
-                    if (gameplayEffectSpec.CanRunning()) gameplayEffectSpec.Activate();
+                    if (gameplayEffectSpec.GameplayEffect.CanRunning(_owner)) gameplayEffectSpec.Activate();
                 }
                 else
                 {
                     // new deactive gameplay effects
-                    if (!gameplayEffectSpec.CanRunning()) gameplayEffectSpec.Deactivate();
+                    if (!gameplayEffectSpec.GameplayEffect.CanRunning(_owner)) gameplayEffectSpec.Deactivate();
                 }
             }
+
             OnGameplayEffectContainerIsDirty?.Invoke();
         }
 
@@ -168,6 +208,61 @@ namespace GAS.Runtime
             _gameplayEffectSpecs.Clear();
 
             OnGameplayEffectContainerIsDirty?.Invoke();
+        }
+
+        private void GetStackingEffectSpecByData(GameplayEffect effect, out GameplayEffectSpec spec)
+        {
+            foreach (var gameplayEffectSpec in _gameplayEffectSpecs)
+                if (gameplayEffectSpec.GameplayEffect.StackEqual(effect))
+                {
+                    spec = gameplayEffectSpec;
+                    return;
+                }
+
+            spec = null;
+        }
+
+        private void GetStackingEffectSpecByDataFrom(GameplayEffect effect,AbilitySystemComponent source, 
+            out GameplayEffectSpec spec)
+        {
+            foreach (var gameplayEffectSpec in _gameplayEffectSpecs)
+                if (gameplayEffectSpec.Source == source && 
+                    gameplayEffectSpec.GameplayEffect.StackEqual(effect))
+                {
+                    spec = gameplayEffectSpec;
+                    return;
+                }
+
+            spec = null;
+        }
+
+        private void OnRefreshStackCountMakeContainerDirty()
+        {
+            OnGameplayEffectContainerIsDirty?.Invoke();
+        }
+        
+        private GameplayEffectSpec Operation_AddNewGameplayEffectSpec(AbilitySystemComponent source,GameplayEffectSpec effectSpec,
+            bool overwriteEffectLevel,int effectLevel)
+        {
+            var level = overwriteEffectLevel ? effectLevel : source.Level;
+            effectSpec.Init(source, _owner, level);
+            _gameplayEffectSpecs.Add(effectSpec);
+            effectSpec.TriggerOnAdd();
+            effectSpec.Apply();
+
+            // If the gameplay effect was removed immediately after being applied, return false
+            if (!_gameplayEffectSpecs.Contains(effectSpec))
+            {
+#if UNITY_EDITOR
+                UnityEngine.Debug.LogWarning(
+                    $"GameplayEffect {effectSpec.GameplayEffect.GameplayEffectName} was removed immediately after being applied. This may indicate a problem with the RemoveGameplayEffectsWithTags.");
+#endif
+                // No need to trigger OnGameplayEffectContainerIsDirty, it has already been triggered when it was removed.
+                return null;
+            }
+
+            OnGameplayEffectContainerIsDirty?.Invoke();
+            return effectSpec;
         }
     }
 }
