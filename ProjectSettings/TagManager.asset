@@ -16,8 +16,8 @@ TagManager:
   - FightUnit
   - DefendArea
   - EventTrigger
-  - 
-  - 
+  - Bullet
+  - Element
   - 
   - 
   - 
