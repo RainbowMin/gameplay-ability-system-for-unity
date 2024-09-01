@@ -12,4 +12,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2112111feb463caf561bfc7cfe18ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attributes: []
+  attributes:
+  - Name: HP
+    Comment: 
+    CalculateMode: 0
+    SupportedOperation: 31
+    DefaultValue: 0
+    LimitMinValue: 0
+    MinValue: -3.4028235e+38
+    LimitMaxValue: 0
+    MaxValue: 3.4028235e+38
+  - Name: Speed
+    Comment: 
+    CalculateMode: 0
+    SupportedOperation: 31
+    DefaultValue: 0
+    LimitMinValue: 0
+    MinValue: -3.4028235e+38
+    LimitMaxValue: 0
+    MaxValue: 3.4028235e+38
+  - Name: Atk
+    Comment: 
+    CalculateMode: 0
+    SupportedOperation: 31
+    DefaultValue: 0
+    LimitMinValue: 0
+    MinValue: -3.4028235e+38
+    LimitMaxValue: 0
+    MaxValue: 3.4028235e+38

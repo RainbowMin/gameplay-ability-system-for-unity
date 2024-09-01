@@ -1,4 +1,5 @@
 using UnityEngine;
+using GAS;
 
 public class Bullet : MonoBehaviour
 {
@@ -18,13 +19,15 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        /*
         // 伤害生效
-        //if(other.gameObject.TryGetComponent(out AbilitySystemComponent enemy))
+        if(other.gameObject.TryGetComponent(out AbilitySystemComponent enemy))
         {
         }
-        //else
+        else
         {
             //Destroy(gameObject);
         }
+        */
     }
 }
