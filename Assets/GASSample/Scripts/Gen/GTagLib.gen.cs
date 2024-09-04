@@ -19,7 +19,10 @@ namespace GAS.Runtime
         public static GameplayTag Event { get; } = new GameplayTag("Event");
         public static GameplayTag Event_Ban { get; } = new GameplayTag("Event.Ban");
         public static GameplayTag Event_Ban_Move { get; } = new GameplayTag("Event.Ban.Move");
-        public static GameplayTag Event_Moving { get; } = new GameplayTag("Event.Moving");
+        public static GameplayTag Faction { get; } = new GameplayTag("Faction");
+        public static GameplayTag Faction_Enemy { get; } = new GameplayTag("Faction.Enemy");
+        public static GameplayTag Faction_Player { get; } = new GameplayTag("Faction.Player");
+        public static GameplayTag Moving { get; } = new GameplayTag("Moving");
         public static GameplayTag State { get; } = new GameplayTag("State");
         public static GameplayTag State_Debuff { get; } = new GameplayTag("State.Debuff");
         public static GameplayTag State_Debuff_Cold { get; } = new GameplayTag("State.Debuff.Cold");
@@ -36,7 +39,10 @@ namespace GAS.Runtime
             ["Event"] = Event,
             ["Event.Ban"] = Event_Ban,
             ["Event.Ban.Move"] = Event_Ban_Move,
-            ["Event.Moving"] = Event_Moving,
+            ["Faction"] = Faction,
+            ["Faction.Enemy"] = Faction_Enemy,
+            ["Faction.Player"] = Faction_Player,
+            ["Moving"] = Moving,
             ["State"] = State,
             ["State.Debuff"] = State_Debuff,
             ["State.Debuff.Cold"] = State_Debuff_Cold,

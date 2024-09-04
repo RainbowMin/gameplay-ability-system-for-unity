@@ -16,24 +16,15 @@ MonoBehaviour:
   - _id: 1
     _name: Root
     _depth: -1
-  - _id: 14
-    _name: CD
+  - _id: 19
+    _name: Faction
     _depth: 0
-  - _id: 15
-    _name: Sweep
+  - _id: 20
+    _name: Player
     _depth: 1
-  - _id: 12
-    _name: Event
-    _depth: 0
-  - _id: 18
-    _name: Moving
+  - _id: 21
+    _name: Enemy
     _depth: 1
-  - _id: 16
-    _name: Ban
-    _depth: 1
-  - _id: 17
-    _name: Move
-    _depth: 2
   - _id: 4
     _name: State
     _depth: 0
@@ -58,42 +49,42 @@ MonoBehaviour:
   - _id: 10
     _name: Fire
     _depth: 1
+  - _id: 12
+    _name: Event
+    _depth: 0
+  - _id: 16
+    _name: Ban
+    _depth: 1
+  - _id: 17
+    _name: Move
+    _depth: 2
+  - _id: 18
+    _name: Moving
+    _depth: 0
+  - _id: 14
+    _name: CD
+    _depth: 0
+  - _id: 15
+    _name: Sweep
+    _depth: 1
   Tags:
-  - _name: CD
-    _hashCode: -1137859925
-    _shortName: CD
+  - _name: Faction
+    _hashCode: -168968830
+    _shortName: Faction
     _ancestorHashCodes: 
     _ancestorNames: []
-  - _name: CD.Sweep
-    _hashCode: -303359587
-    _shortName: Sweep
-    _ancestorHashCodes: aba22dbc
+  - _name: Faction.Player
+    _hashCode: 1030057057
+    _shortName: Player
+    _ancestorHashCodes: 82bdedf5
     _ancestorNames:
-    - CD
-  - _name: Event
-    _hashCode: 667645442
-    _shortName: Event
-    _ancestorHashCodes: 
-    _ancestorNames: []
-  - _name: Event.Moving
-    _hashCode: 798883614
-    _shortName: Moving
-    _ancestorHashCodes: 0276cb27
+    - Faction
+  - _name: Faction.Enemy
+    _hashCode: -1091112840
+    _shortName: Enemy
+    _ancestorHashCodes: 82bdedf5
     _ancestorNames:
-    - Event
-  - _name: Event.Ban
-    _hashCode: 886515543
-    _shortName: Ban
-    _ancestorHashCodes: 0276cb27
-    _ancestorNames:
-    - Event
-  - _name: Event.Ban.Move
-    _hashCode: -1122116332
-    _shortName: Move
-    _ancestorHashCodes: 0276cb275727d734
-    _ancestorNames:
-    - Event
-    - Event.Ban
+    - Faction
   - _name: State
     _hashCode: 1695958603
     _shortName: State
@@ -141,3 +132,37 @@ MonoBehaviour:
     _ancestorHashCodes: b84ed1e0
     _ancestorNames:
     - Ability
+  - _name: Event
+    _hashCode: 667645442
+    _shortName: Event
+    _ancestorHashCodes: 
+    _ancestorNames: []
+  - _name: Event.Ban
+    _hashCode: 886515543
+    _shortName: Ban
+    _ancestorHashCodes: 0276cb27
+    _ancestorNames:
+    - Event
+  - _name: Event.Ban.Move
+    _hashCode: -1122116332
+    _shortName: Move
+    _ancestorHashCodes: 0276cb275727d734
+    _ancestorNames:
+    - Event
+    - Event.Ban
+  - _name: Moving
+    _hashCode: 722532836
+    _shortName: Moving
+    _ancestorHashCodes: 
+    _ancestorNames: []
+  - _name: CD
+    _hashCode: -1137859925
+    _shortName: CD
+    _ancestorHashCodes: 
+    _ancestorNames: []
+  - _name: CD.Sweep
+    _hashCode: -303359587
+    _shortName: Sweep
+    _ancestorHashCodes: aba22dbc
+    _ancestorNames:
+    - CD
