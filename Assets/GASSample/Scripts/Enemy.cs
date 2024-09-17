@@ -11,8 +11,11 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         _rb = gameObject.GetComponent<Rigidbody2D>();
-        _asc = gameObject.GetComponent<AbilitySystemComponent>();
+        _asc = gameObject.GetComponent<AbilitySystemComponent>();        
+    }
 
+    private void Start()
+    {
         GameRunner.Instance.RegisterEnemy(this);
     }
 
