@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d763af469c524557946c477b9bea3a46, type: 3}
+  m_Name: Sweep
+  m_EditorClassIdentifier: 
+  Description: 
+  UniqueName: Sweep
+  Cost: {fileID: 0}
+  Cooldown: {fileID: 11400000, guid: 82aa583971b710042b406c7bf0dde0d4, type: 2}
+  CooldownTime: 10
+  AssetTags:
+  - _name: Ability.Sweep
+    _hashCode: 1540976138
+    _shortName: Sweep
+    _ancestorHashCodes: b84ed1e0
+    _ancestorNames:
+    - Ability
+  CancelAbilityTags: []
+  BlockAbilityTags: []
+  ActivationOwnedTags: []
+  ActivationRequiredTags: []
+  ActivationBlockedTags: []
+  manualEndAbility: 0
+  FrameCount: 25
+  DurationalCues: []
+  InstantCues: []
+  ReleaseGameplayEffect:
+  - trackName: "\u6A2A\u626B\u4F24\u5BB3"
+    markEvents:
+    - startFrame: 5
+      jsonTargetCatcher:
+        Type: GAS.Runtime.CatchAreaCircle2D
+        Data: '{"Owner":{"instanceID":0},"checkLayer":{"serializedVersion":"2","m_Bits":4096},"radius":5.0,"offset":{"x":0.0,"y":0.0},"centerType":0}'
+      gameplayEffectAssets:
+      - {fileID: 11400000, guid: bb9a51a077f6c9944805c545eb3c53a8, type: 2}
+  BuffGameplayEffects: []
+  InstantTasks:
+  - trackName: 
+    markEvents:
+    - startFrame: 0
+      InstantTasks:
+      - TaskData:
+          Type: GAS.Runtime.ApplyCostAndCoolDown
+          Data: '{}'
+  OngoingTasks: []
