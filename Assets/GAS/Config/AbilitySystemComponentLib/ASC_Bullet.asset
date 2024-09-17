@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85dd2a6201f04545b5a8b020edcb2690, type: 3}
   m_Name: ASC_Bullet
   m_EditorClassIdentifier: 
-  Description: 
-  AttributeSets: []
+  Description: "\u5B50\u5F39"
+  AttributeSets:
+  - Bullet
   BaseTags: []
   BaseAbilities: []

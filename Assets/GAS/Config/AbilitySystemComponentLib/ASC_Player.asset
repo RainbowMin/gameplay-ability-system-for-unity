@@ -12,7 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85dd2a6201f04545b5a8b020edcb2690, type: 3}
   m_Name: ASC_Player
   m_EditorClassIdentifier: 
-  Description: 
-  AttributeSets: []
-  BaseTags: []
-  BaseAbilities: []
+  Description: "\u73A9\u5BB6"
+  AttributeSets:
+  - Fight
+  BaseTags:
+  - _name: Faction.Player
+    _hashCode: 1030057057
+    _shortName: Player
+    _ancestorHashCodes: 82bdedf5
+    _ancestorNames:
+    - Faction
+  BaseAbilities:
+  - {fileID: 11400000, guid: a2f466a69156bf3498c4b7179d2c62fd, type: 2}
+  - {fileID: 11400000, guid: 4e0c77c47f4b34846b0ae293b157bc39, type: 2}
+  - {fileID: 11400000, guid: 449f35ab81abd9743b45a0356ddf5eb0, type: 2}

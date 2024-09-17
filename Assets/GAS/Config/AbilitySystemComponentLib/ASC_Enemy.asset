@@ -12,7 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85dd2a6201f04545b5a8b020edcb2690, type: 3}
   m_Name: ASC_Enemy
   m_EditorClassIdentifier: 
-  Description: 
-  AttributeSets: []
-  BaseTags: []
-  BaseAbilities: []
+  Description: "\u654C\u4EBA"
+  AttributeSets:
+  - Fight
+  BaseTags:
+  - _name: Faction.Enemy
+    _hashCode: -1091112840
+    _shortName: Enemy
+    _ancestorHashCodes: 82bdedf5
+    _ancestorNames:
+    - Faction
+  BaseAbilities:
+  - {fileID: 11400000, guid: a102954eba7596b4eb0135bc429813df, type: 2}
+  - {fileID: 11400000, guid: 4e0c77c47f4b34846b0ae293b157bc39, type: 2}
