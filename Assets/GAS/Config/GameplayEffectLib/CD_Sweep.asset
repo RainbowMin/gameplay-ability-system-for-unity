@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9395a0be3e547f48bd1c8320edc6c58, type: 3}
   m_Name: CD_Sweep
   m_EditorClassIdentifier: 
-  Description: 
-  DurationPolicy: 1
-  Duration: 0
+  Description: "\u6A2A\u626B\u7684CD"
+  DurationPolicy: 3
+  Duration: 1
   Period: 0
   PeriodExecution: {fileID: 0}
   Stacking:
@@ -29,8 +29,20 @@ MonoBehaviour:
     overflowEffects: []
   GrantedAbilities: []
   Modifiers: []
-  AssetTags: []
-  GrantedTags: []
+  AssetTags:
+  - _name: CD.Sweep
+    _hashCode: -303359587
+    _shortName: Sweep
+    _ancestorHashCodes: aba22dbc
+    _ancestorNames:
+    - CD
+  GrantedTags:
+  - _name: CD.Sweep
+    _hashCode: -303359587
+    _shortName: Sweep
+    _ancestorHashCodes: aba22dbc
+    _ancestorNames:
+    - CD
   ApplicationRequiredTags: []
   OngoingRequiredTags: []
   RemoveGameplayEffectsWithTags: []

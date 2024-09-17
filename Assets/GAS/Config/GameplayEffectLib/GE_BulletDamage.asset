@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9395a0be3e547f48bd1c8320edc6c58, type: 3}
   m_Name: GE_BulletDamage
   m_EditorClassIdentifier: 
-  Description: 
+  Description: "\u5B50\u5F39\u4F24\u5BB3"
   DurationPolicy: 1
   Duration: 0
   Period: 0
@@ -28,10 +28,22 @@ MonoBehaviour:
     clearStackOnOverflow: 0
     overflowEffects: []
   GrantedAbilities: []
-  Modifiers: []
+  Modifiers:
+  - AttributeName: AS_Fight.HP
+    AttributeSetName: AS_Fight
+    AttributeShortName: HP
+    ModiferMagnitude: 0
+    Operation: 0
+    MMC: {fileID: 11400000, guid: 090dc09965d6c0d45a87b4ffdab7e499, type: 2}
   AssetTags: []
   GrantedTags: []
-  ApplicationRequiredTags: []
+  ApplicationRequiredTags:
+  - _name: Faction.Enemy
+    _hashCode: -1091112840
+    _shortName: Enemy
+    _ancestorHashCodes: 82bdedf5
+    _ancestorNames:
+    - Faction
   OngoingRequiredTags: []
   RemoveGameplayEffectsWithTags: []
   ApplicationImmunityTags: []
