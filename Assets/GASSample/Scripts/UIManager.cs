@@ -45,6 +45,6 @@ public class UIManager : MonoBehaviour
 
     public void Play()
     {
-        //GameRunner.Instance.StartGame();
+        GameRunner.Instance.StartGame();
     }
 }

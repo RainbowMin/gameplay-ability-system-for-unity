@@ -56,12 +56,7 @@ MonoBehaviour:
   ActivationBlockedTags: []
   manualEndAbility: 0
   FrameCount: 15
-  DurationalCues:
-  - trackName: 
-    clipEvents:
-    - startFrame: 0
-      durationFrame: 10
-      cue: {fileID: 0}
+  DurationalCues: []
   InstantCues: []
   ReleaseGameplayEffect: []
   BuffGameplayEffects: []
