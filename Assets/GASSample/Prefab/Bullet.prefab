@@ -162,6 +162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2612a498477d1494397c32bfb0a57889, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _geBulletDamageAsset: {fileID: 11400000, guid: fc1fea843e07ff24c9e8b63ee4c02504, type: 2}
 --- !u!114 &296155595056465279
 MonoBehaviour:
   m_ObjectHideFlags: 0

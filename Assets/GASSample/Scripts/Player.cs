@@ -49,7 +49,7 @@ public class Player : MonoBehaviour
         _asc.AttrSet<AS_Fight>().InitAtk(10);
 
         _asc.AttrSet<AS_Fight>().HP.RegisterPostBaseValueChange(_OnHpChange);
-        _asc.AbilityContainer.AbilitySpecs()[GAbilityLib.Die.Name].UnregisterEndAbility(OnDie);
+        _asc.AbilityContainer.AbilitySpecs()[GAbilityLib.Die.Name].RegisterEndAbility(OnDie);
     }
 
     private void Update()
@@ -74,11 +74,15 @@ public class Player : MonoBehaviour
 
     private void OnSweep(InputAction.CallbackContext context)
     {
+        Debug.Log("Sweep, time="+Time.time);
+
         _asc.TryActivateAbility(GAbilityLib.Sweep.Name);
     }
 
     private void OnFire(InputAction.CallbackContext context)
     {
+        Debug.Log("Fire, time="+Time.time);        
+
         _asc.TryActivateAbility(GAbilityLib.Fire.Name);
     }
 
@@ -100,6 +104,12 @@ public class Player : MonoBehaviour
     private void OnDie()
     {
         GameRunner.Instance.GameOver();
+        _asc.TryActivateAbility(GAbilityLib.Die.Name);
+        Invoke("_Destory", 1);        
+    }
+
+    void _Destory()
+    {
         Destroy(gameObject);
     }
 }

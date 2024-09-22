@@ -9,11 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2676f58e3e22a9543bd0f4345e94a561, type: 3}
-  m_Name: CueCameraShake
+  m_Script: {fileID: 11500000, guid: ebeb330010ca9e84f8c95e29c203000c, type: 3}
+  m_Name: CueBombWarning
   m_EditorClassIdentifier: 
   Description: 
   RequiredTags: []
   ImmunityTags: []
-  shakePower: 0.2
-  shakeDuration: 0.5
+  Radius: 1.5
+  Visualization: {fileID: 6087945541842543003, guid: 0619427a329c76842913a50922348667, type: 3}
+  Duration: 1.3

@@ -15,8 +15,8 @@ MonoBehaviour:
   Description: 
   UniqueName: Sweep
   Cost: {fileID: 0}
-  Cooldown: {fileID: 11400000, guid: 82aa583971b710042b406c7bf0dde0d4, type: 2}
-  CooldownTime: 10
+  Cooldown: {fileID: 0}
+  CooldownTime: 0
   AssetTags:
   - _name: Ability.Sweep
     _hashCode: 1540976138
@@ -31,7 +31,12 @@ MonoBehaviour:
   ActivationBlockedTags: []
   manualEndAbility: 0
   FrameCount: 25
-  DurationalCues: []
+  DurationalCues:
+  - trackName: 
+    clipEvents:
+    - startFrame: 0
+      durationFrame: 15
+      cue: {fileID: 11400000, guid: 6fc610435a547a84d8fa32a51a1a12d4, type: 2}
   InstantCues: []
   ReleaseGameplayEffect:
   - trackName: "\u6A2A\u626B\u4F24\u5BB3"

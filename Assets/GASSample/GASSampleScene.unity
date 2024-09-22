@@ -1720,7 +1720,7 @@ Transform:
   m_GameObject: {fileID: 1788919064}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2077,6 +2077,67 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1001 &2171587755770477370
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6087945541842543003, guid: 0619427a329c76842913a50922348667, type: 3}
+      propertyPath: m_Name
+      value: BombWarning
+      objectReference: {fileID: 0}
+    - target: {fileID: 6087945541842543003, guid: 0619427a329c76842913a50922348667, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281163285297608621, guid: 0619427a329c76842913a50922348667, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281163285297608621, guid: 0619427a329c76842913a50922348667, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.94
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281163285297608621, guid: 0619427a329c76842913a50922348667, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281163285297608621, guid: 0619427a329c76842913a50922348667, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281163285297608621, guid: 0619427a329c76842913a50922348667, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281163285297608621, guid: 0619427a329c76842913a50922348667, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281163285297608621, guid: 0619427a329c76842913a50922348667, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281163285297608621, guid: 0619427a329c76842913a50922348667, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281163285297608621, guid: 0619427a329c76842913a50922348667, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281163285297608621, guid: 0619427a329c76842913a50922348667, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0619427a329c76842913a50922348667, type: 3}
 --- !u!1001 &4415192228632213260
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2194,10 +2255,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8056723548694088698, guid: 75f266145cea8cd4ab1c36b4e369a9f6, type: 3}
-      propertyPath: _geBulletDamageAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: fc1fea843e07ff24c9e8b63ee4c02504, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2276,4 +2333,5 @@ SceneRoots:
   - {fileID: 5013389718846009033}
   - {fileID: 4415192228632213260}
   - {fileID: 4712381549892870720}
+  - {fileID: 2171587755770477370}
   - {fileID: 1089822581}

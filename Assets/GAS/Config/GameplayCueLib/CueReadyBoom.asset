@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2676f58e3e22a9543bd0f4345e94a561, type: 3}
-  m_Name: CueCameraShake
+  m_Script: {fileID: 11500000, guid: 89f7986dd70ab9449973c78bc7c4c838, type: 3}
+  m_Name: CueReadyBoom
   m_EditorClassIdentifier: 
   Description: 
   RequiredTags: []
   ImmunityTags: []
-  shakePower: 0.2
-  shakeDuration: 0.5
+  period: 0.075
+  zoomScale: 0.5

@@ -9,11 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2676f58e3e22a9543bd0f4345e94a561, type: 3}
-  m_Name: CueCameraShake
+  m_Script: {fileID: 11500000, guid: 1261c2b342e03224ebc341132b01bf92, type: 3}
+  m_Name: CueDeadVfx
   m_EditorClassIdentifier: 
   Description: 
   RequiredTags: []
   ImmunityTags: []
-  shakePower: 0.2
-  shakeDuration: 0.5
+  VfxPrefab: {fileID: 7011644790466389779, guid: 0ea7cd167bcacfc4bb716b6a110f102a, type: 3}
+  IsAttachToTarget: 1
+  Offset: {x: 0, y: 0, z: 0}
+  Rotation: {x: 0, y: 0, z: 0}
+  Scale: {x: 1, y: 1, z: 1}
+  ActiveWhenAdded: 1
